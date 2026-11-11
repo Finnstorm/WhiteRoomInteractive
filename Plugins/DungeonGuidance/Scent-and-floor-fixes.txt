@@ -1,0 +1,65 @@
+Smell trail and room floor fixes - 11 November 2026
+
+Scope
+Fix the missing trail and align the main floors in all thirteen room types
+actually used by the placed map generator. Preserve recessed interiors, room
+layouts, user room weights and the generator Blueprint changes. The proposed
+shared corridor network is awaiting approval and is not implemented in this fix.
+
+Findings
+The World Partition external generator actor has eleven weighted room classes;
+the Blueprint default list contains only six. The earlier test coverage missed
+Hee_Hee_Garden_1, Medical_Beds_gen, Nurse_Corner, Server_Room_gen and Tree_Room_gen.
+Tests now use the actual override list and a seed from the user's play log.
+
+Some room placement boxes are only 19.2 cm tall. Their Z bounds were incorrectly
+limiting the floating trail's 3D search. The new regression test requires the
+trail to rise above a 320 cm obstruction while staying inside a room bounded by
+one of these boxes. It passes with a 420 cm peak and collision-clear segments.
+
+Main floor heights ranged from approximately -14.92 to +1.00 cm in room-local
+coordinates. Exit marker Z offsets also accumulated as rooms spawned from exits.
+All thirteen main floors and exit markers are now aligned to local Z=0, within
+0.005 cm collision-query tolerance. Imported geometry/furniture moves together.
+Recesses remain at their original depth relative to the main floor. The tree room's
+extra 0.1 cm floor-piece mismatch is aligned as well. Additional used exit arrows
+are hidden in game. Room placement X/Y positions and user weights are retained.
+
+Trail changes
+- Use room placement boxes as horizontal footprints; use real collision for
+  vertical clearance instead of imposing the thin placement-box height.
+- Keep a collision-verified prefix if a later local section fails. Never connect
+  disconnected path sections through walls to fake a complete route.
+- Exposure-compensated emissive material, with editable TrailColor,
+  TrailBrightness and TrailOpacity parameters. Opacity is 0.55 and brightness
+  1.5 by default; spline-mesh usage is explicitly enabled.
+- Radius defaults to 2 cm. Existing explicit instance overrides still apply.
+- A short collision-tested lead-in starts in the upper camera view when possible,
+  so a route behind the player is easier to notice. Defaults: 120 cm forward,
+  35 cm above the view; the rest follows the overhead route.
+- Timers retain 10s doorway delay, 20s smell delay and 30s route refresh.
+
+Runtime diagnostics
+During play select Map_Generator's DungeonGuidance component, Guidance / Debug:
+  SmellStatus
+  VisibleSmellSegments
+  bScentRouteComplete
+  LastScentRouteFailure
+The Output Log also records status changes. For example, leaving the cached
+route reports that the trail is waiting for the route-refresh cooldown instead
+of silently hiding without an explanation.
+
+Tuning
+Map_Generator -> DungeonGuidance -> Guidance / Smell:
+  SmellRadius, SmellHeightAboveFloor, SmellViewLeadDistance, SmellViewLeadHeight.
+The material is /Game/Blueprints/ProceduralMap/Guidance/M_SmellTrail.
+
+Validation outputs
+work/guidance-analysis/floor-normalization.txt records per-room measured changes.
+work/guidance-analysis/actual-smell-repro.txt records the normal-tick player test.
+work/test-scent-headroom-engine.log records the placement-height regression.
+The plugin is built for Editor, Windows Development and Windows Shipping.
+The preview is rendered at neutral exposure rather than the earlier bright test
+camera setting. These checks do not replace a final gameplay feel check in PIE.
+
+No ability purchases, point balances or persistent save-game data are reset.

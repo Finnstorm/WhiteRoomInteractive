@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Dungeon Guidance",
+  "Description": "Objective guidance, room routing and safe unused-exit connectors.",
+  "Category": "Gameplay",
+  "EnabledByDefault": true,
+  "CanContainContent": false,
+  "Plugins": [{"Name":"EnhancedInput","Enabled":true},{"Name":"ProceduralMeshComponent","Enabled":true},{"Name":"GeometryProcessing","Enabled":true}],
+  "Modules": [{ "Name": "DungeonGuidance", "Type": "Runtime", "LoadingPhase": "Default" }]
+}
+
