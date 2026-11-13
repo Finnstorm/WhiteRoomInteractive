@@ -1,0 +1,66 @@
+{
+  "BP_Enemy": [
+    "UserConstructionScript",
+    "AttackEnabled",
+    "SetAttackEnabled",
+    "ClearLineTo",
+    "NotifyPlayerDamage",
+    "TryBlock",
+    "TryAttack",
+    "UpdateResources",
+    "ResolveAttack",
+    "UpdateSenses",
+    "PatrolOrSearch",
+    "UpdatePresentation",
+    "ReleaseFinishingPlayer",
+    "Die",
+    "BeginFinisher",
+    "AdvanceFinisher",
+    "SetState",
+    "SetDifficultyLevels",
+    "RefreshIntelligence",
+    "RefreshCombatChoices",
+    "MoveToPoint",
+    "Think",
+    "UpdateBrain",
+    "ReceiveCombatDamage",
+    "EventGraph"
+  ],
+  "AC_EnemyHealth_BP": [
+    "Initialize",
+    "UpdateMaximum",
+    "ProcessDamage",
+    "EventGraph"
+  ],
+  "AC_EnemyCombat_BP": [
+    "DealPointDamage",
+    "EventGraph"
+  ],
+  "ABP_Enemy": [
+    "AnimGraph",
+    "LocoStateMachine",
+    "Idle/Walk/Run",
+    "FP_Falling",
+    "FP_JumpEnd",
+    "AnimationTransitionGraph_2",
+    "Transition",
+    "Transition",
+    "EventGraph"
+  ],
+  "BP_PlayerBridge": [
+    "UserConstructionScript",
+    "ApplyStun",
+    "EventGraph"
+  ],
+  "BP_EnemySpawner": [
+    "UserConstructionScript",
+    "SetDifficultyLevels",
+    "ProcessRoom",
+    "SpawnPending",
+    "EventGraph"
+  ],
+  "BP_TestObserver": [
+    "UserConstructionScript",
+    "EventGraph"
+  ]
+}

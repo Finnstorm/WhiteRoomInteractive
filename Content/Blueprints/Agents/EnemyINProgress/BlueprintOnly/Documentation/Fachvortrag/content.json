@@ -1,0 +1,362 @@
+{
+  "slides": [
+    {
+      "title": "Enemy AI: Sensory Setup and Difficulty scaling",
+      "subtitle": "Sensory Setup and\nDifficulty scaling",
+      "kind": "cover",
+      "seconds": 15,
+      "body": [
+        "Blueprint-Version · WhiteRoomInteractive",
+        "[Name] · Matrikelnummer: [eintragen]",
+        "Modul: [eintragen] · Fachdozent:in: [eintragen]"
+      ],
+      "refs": [],
+      "notes": "Mein Teil heißt Enemy AI: Sensory Setup and Difficulty scaling. Ich zeige, wie der Gegner Informationen über den Spieler erhält und wie sein Verhalten an den Fortschritt angepasst wird. Dabei geht es besonders um nachvollziehbare Regeln und die Stellschrauben für das Design Department. [Persönlichen Eigenanteil und Deckblattangaben ergänzen.]"
+    },
+    {
+      "title": "Themen und Reihenfolge",
+      "kind": "agenda",
+      "seconds": 20,
+      "body": [
+        "01  Alter und neuer Gegner",
+        "02  Sensory Setup: Funktionsweise",
+        "03  Sensorik: Vor- und Nachteile, Designerzugang",
+        "04  Difficulty Scaling: Funktionsweise",
+        "05  Scaling: Begründung, Designerzugang, Vor- und Nachteile",
+        "06  Ausbau beider Systeme"
+      ],
+      "refs": [],
+      "notes": "Ich beginne mit dem Vergleich zur bisherigen Enemy AI. Danach erkläre ich das Sensory Setup, seine Vor- und Nachteile und die Einstellmöglichkeiten für Designer. Anschließend folgt die Difficulty-Skalierung: ihre Berechnung, die Begründung und der Designerzugang. Zum Schluss zeige ich mögliche Erweiterungen in beiden Bereichen."
+    },
+    {
+      "title": "Comparison: Old enemy / New enemy",
+      "kind": "comparison",
+      "seconds": 50,
+      "body": [
+        "BP_Enemy_punch → BlueprintOnly/BP_Enemy",
+        "Patrouille und Reaktion auf Sichtverlust gab es bereits."
+      ],
+      "table": [
+        [
+          "Bereich",
+          "Alter Punch-Gegner",
+          "Neuer Blueprint-Gegner"
+        ],
+        [
+          "Wahrnehmung",
+          "AIPerception + Controller",
+          "Sicht, Nähezeit und Schaden"
+        ],
+        [
+          "Sichtverlust",
+          "Lost Sight → Seeking",
+          "Gespeicherter Ort → Search"
+        ],
+        [
+          "Balancing",
+          "Feste Bewegungsstufen",
+          "Vier Level + Entscheidungstempo"
+        ]
+      ],
+      "refs": [
+        "E5",
+        "E1"
+      ],
+      "notes": "Alt bezeichnet hier BP_Enemy_punch mit seinem zugewiesenen AIC_Enemy_Base, nicht unseren C++-Prototyp. Der alte Controller verwendet AIPerception, Behavior Tree und Blackboard und hat bereits Handler für Sicht, Schaden und Sichtverlust. Außerdem gibt es Patrouillen-Tasks und einen Sound-Handler; dessen vollständiges Laufzeitverhalten wurde nicht neu geprüft. Wir haben Wahrnehmung und Suche also nicht erstmals erfunden. Im neuen Blueprint-Gegner sind die Sichtprüfung, die kontinuierliche Nähezeit und die Schadensreaktion explizit in Funktionen beschrieben. Der zuletzt bekannte Ort steuert die Suche. Für die Progression kommen vier externe Level und daraus abgeleitete Entscheidungsintervalle hinzu. Die Behauptung ist eine andere Aufteilung mit erweitertem Tuning, nicht eine gemessene Überlegenheit oder eine grundsätzliche Abwertung von Behavior Trees."
+    },
+    {
+      "title": "Sensory Setup: Wie erkennt er den Spieler?",
+      "kind": "sensory",
+      "seconds": 65,
+      "body": [
+        "Sicht",
+        "18 m · 65° Halbwinkel",
+        "Distanz + Blickkegel + Sichtlinie",
+        "Nähe",
+        "2,5 s",
+        "Durchgehend in 2,5 m, freie Sicht",
+        "Schaden",
+        "Sofort",
+        "Treffer einem Spieler zugeordnet",
+        "Kontakt verloren → letzter bekannter Ort → Suche"
+      ],
+      "refs": [
+        "Q2",
+        "Q3",
+        "E1"
+      ],
+      "notes": "Das neue Setup hat drei Wege zur Aufmerksamkeit. Erstens die Sicht: UpdateSenses kombiniert Entfernung, Blickkegel und ClearLineTo. Alle drei Bedingungen müssen passen. Standardmäßig sind das 18 Meter Sichtweite und ein Halbwinkel von 65 Grad. Sichtbarkeit alarmiert ohne zusätzlichen Verdachtstimer. Zweitens die Nähe: Sie funktioniert auch außerhalb des Blickkegels, verlangt aber eine freie Sichtlinie und zweieinhalb Sekunden ununterbrochene Nähe innerhalb von zweieinhalb Metern. Wird die Bedingung unterbrochen, beginnt der Timer wieder bei null. Drittens die Schadensreaktion: NotifyPlayerDamage übernimmt einen zugeordneten, playerkontrollierten Character als Ziel und alarmiert sofort. Bei aktueller Wahrnehmung wird LastKnownLocation gespeichert. Nach verlorenem Kontakt verfolgt der Gegner diesen Punkt und wechselt unter den Ankunfts- und Zeitbedingungen in Search. Das ist begrenztes, regelbasiertes Wissen; ein neuer Treffer oder erneute Wahrnehmung darf den Ort wieder aktualisieren. Die Zahlen sind Projektdefaults, keine wissenschaftlich optimalen Werte."
+    },
+    {
+      "title": "Sensorik: Vor- und Nachteile",
+      "kind": "proscons",
+      "seconds": 40,
+      "body": [
+        "Klare Auslöser",
+        "Sinne getrennt einstellbar",
+        "Binäre Sicht-Erkennung",
+        "Keine Hörsensorik im neuen Setup",
+        "Fairness und Lesbarkeit müssen im Playtest geprüft werden."
+      ],
+      "refs": [
+        "Q3",
+        "E1"
+      ],
+      "notes": "Der Vorteil liegt in den klaren Auslösern: Ich kann erklären und testen, welche Kombination zur Entdeckung führt. Sicht und Nähe sind getrennt einstellbar. Das gibt dem Designer Kontrolle über unterschiedliche Situationen, etwa einen Spieler vor oder hinter dem Gegner. Die Grenzen sind ebenfalls konkret: Die Sichtentscheidung ist binär. Sie besitzt noch keinen ansteigenden Verdachtswert; beim Überschreiten der Grenze kann die Reaktion abrupt wirken. Im neuen Setup fehlen außerdem Geräuschereignisse. Der alte Sound-Handler darf deshalb nicht als hier bereits übernommene Funktion präsentiert werden. Die technische Nachvollziehbarkeit unterstützt das Balancing, beweist aber noch keine wahrgenommene Fairness."
+    },
+    {
+      "title": "Sensorik: Zugriff für das Design Department",
+      "kind": "designer_senses",
+      "seconds": 55,
+      "body": [
+        "Class Defaults oder Instanz → Details",
+        "Wahrnehmen und Handeln haben getrennte Zeitbedingungen."
+      ],
+      "table": [
+        [
+          "Einstellen",
+          "Variable(n)",
+          "Wirkung"
+        ],
+        [
+          "Sichtbereich",
+          "SightRadius / SightHalfAngle",
+          "Reichweite und Winkel"
+        ],
+        [
+          "Nähealarm",
+          "ProximitySeconds",
+          "Benötigte Nähezeit"
+        ],
+        [
+          "Suchwechsel",
+          "SightMemory",
+          "Erinnerungsbedingung"
+        ],
+        [
+          "Suchdauer",
+          "SearchDuration",
+          "Länge der Suchphase"
+        ]
+      ],
+      "refs": [
+        "E1"
+      ],
+      "notes": "Für das Balancing muss das Design Department den Graphen nicht für jeden Zahlenwert umbauen. Die Variablen sind in Class Defaults und auf Instanzen editierbar. SightRadius und SightHalfAngle bestimmen den Sichtbereich; ProximityRadius und ProximitySeconds bestimmen Distanz und Dauer der Näheerkennung. SightMemory beteiligt sich am Übergang zur Suche, während SearchDuration die anschließende Suchphase begrenzt. Ein Beispiel: Eine längere ProximitySeconds lässt dem Spieler außerhalb des Blickkegels länger Zeit; sie verzögert nicht automatisch die Sichtdetektion. Ebenso wichtig ist die Trennung zum Handeln: Nach dem Wechsel nach Chase gilt eine DecisionTime, deren Intervall aus der Difficulty abgeleitet wird. Ein Designer sollte also wissen, ob er Entdeckung, Suche oder die anschließende Entscheidung verändern möchte. Der Zugang ist derzeit eine editierbare Variablenoberfläche, kein eigenes Designer-Tool mit fertigen Presets oder Sichtkegel-Gizmos. Werte einzeln ändern und dieselbe Testsituation wiederholen."
+    },
+    {
+      "title": "Difficulty Scaling: Wie funktioniert es?",
+      "kind": "difficulty_values",
+      "seconds": 70,
+      "body": [
+        "Vier Integer-Level: Damage · Block · Health · Movement",
+        "Mittelwert der Level → Entscheidungspause von 0,35 bis 0,10 s"
+      ],
+      "table": [
+        [
+          "Bereich",
+          "Basis",
+          "Zuwachs je Level"
+        ],
+        [
+          "Damage",
+          "12 / 25 / 8 Schaden",
+          "+15 % des Basiswerts"
+        ],
+        [
+          "Block",
+          "3 Treffer",
+          "+1 Treffer Kapazität"
+        ],
+        [
+          "Health",
+          "100 HP",
+          "+20 HP"
+        ],
+        [
+          "Movement",
+          "160 / 360 cm/s",
+          "+8 % der Basis, max. 750"
+        ]
+      ],
+      "refs": [
+        "E1"
+      ],
+      "notes": "Von außen kommen vier Integer-Level. SetDifficultyLevels begrenzt sie zunächst auf null bis zehntausend. Die Tabelle zeigt die Standardkoeffizienten: Schaden ist Basisschaden mal eins plus 0,15 mal DamageLevel. Blockkapazität ist drei plus BlockLevel. Maximale Gesundheit ist hundert plus zwanzig mal HealthLevel. Bewegung wird vom Patrol- beziehungsweise Chase-Basiswert mit eins plus 0,08 mal MovementLevel skaliert und auf 750 Zentimeter pro Sekunde begrenzt. Zusätzlich bildet RefreshIntelligence den Mittelwert aller vier Level. Geteilt durch IntelligenceLevelForMaximum, standardmäßig zehn, ergibt sich ein Faktor zwischen null und eins. DecisionInterval ist 0,35 minus 0,25 mal diesen Faktor. Bei Durchschnitt null sind das 350 Millisekunden, bei zehn 100. Auch das Pfadupdate wird häufiger. Die Entscheidungspause gilt unter anderem beim Wechsel nach Chase; laufende Aktionen bleiben durch ihren Zustand und ihre Timer geschützt. Diese Heuristik lernt nicht und beobachtet keine Spielerleistung. Die maximalen Eingabegrenzen sind Schutzgrenzen, keine Empfehlung für ausgewogene Progression."
+    },
+    {
+      "title": "Warum dieser Ansatz – und wie wird er getunt?",
+      "kind": "designer_difficulty",
+      "seconds": 55,
+      "body": [
+        "Eine Schnittstelle, getrennte Stellschrauben.",
+        "SetDifficultyLevels → Gegner oder Spawner",
+        "Basiswerte, Koeffizienten und IntelligenceLevelForMaximum editieren."
+      ],
+      "labels": [
+        "WARUM",
+        "WIE",
+        "FÜR DAS DESIGN DEPARTMENT"
+      ],
+      "refs": [
+        "E1",
+        "Q1"
+      ],
+      "notes": "Ich habe diesen Ansatz gewählt, weil die Progression von anderen Spielsystemen kommen soll und das Design Department einzelne Bereiche abstimmen können muss. Vier benannte Integer sind als Blueprint-Schnittstelle einfach zu übergeben. Baselines und Zuwächse bleiben direkt editierbar; eine neue Balance erfordert keinen neuen Angriffsgraphen. Für einzelne Gegner wird SetDifficultyLevels aufgerufen. Für eine Population bietet der Spawner dieselbe Schnittstelle mit UpdateExisting; damit erreicht eine Änderung vorhandene und zukünftige Gegner. Designer können etwa HealthPerLevel ändern, ohne DamagePerLevel zu verändern. IntelligenceLevelForMaximum bestimmt, bei welchem Durchschnitt das schnellste Entscheidungstempo erreicht wird. Die abgeleiteten Intervalle sollte man nicht als dauerhafte Konfiguration direkt überschreiben, weil RefreshIntelligence sie neu berechnet. Nach Änderungen die Difficulty erneut anwenden. Das ist ein zugänglicher Parameteransatz, aber noch kein spezialisiertes Preset-/Kurventool. Die erhoffte Wirkung auf Herausforderung ist weiterhin zu testen."
+    },
+    {
+      "title": "Difficulty Scaling: Vor- und Nachteile",
+      "kind": "proscons",
+      "seconds": 45,
+      "body": [
+        "Planbar und reproduzierbar",
+        "Live-Update erhält den Health-Anteil",
+        "Health erhöht auch Entscheidungstempo",
+        "Keine automatische Leistungsanpassung",
+        "Stats und Reaktionsdruck im Balancing getrennt beobachten."
+      ],
+      "refs": [
+        "E1",
+        "E2"
+      ],
+      "notes": "Der erste Vorteil ist Reproduzierbarkeit: Gleiche Eingaben erzeugen dieselben berechneten Grundwerte und Intervalle. Die späteren zufälligen Aktionsentscheidungen sind damit nicht vollständig deterministisch. Außerdem bleibt beim Live-Skalieren der Gesundheitsanteil erhalten, statt den Gegner wieder vollzuheilen. Die getrennten Stat-Koeffizienten erleichtern gezielte Änderungen. Ein Nachteil ist die zusätzliche Kopplung durch den Mittelwert: Selbst ein reiner Health-Anstieg macht den Gegner auch schneller in seinen Entscheidungen. Das kann unbeabsichtigt zwei Schwierigkeitsfaktoren erhöhen. Außerdem ist das Modell überwiegend linear und passt sich nicht selbst an die Leistung eines Spielers an. Bei hohen Leveln kann es deshalb trotz mathematisch gültiger Werte unausgewogen werden. Genau deshalb sollten Stats und Reaktionsdruck getrennt beobachtet werden. Eine technische Testsuite bestätigt die Berechnung und einzelne Abläufe, nicht das ideale Balancing."
+    },
+    {
+      "title": "Ausblick: Sensorik und Difficulty Scaling",
+      "kind": "expansion",
+      "seconds": 65,
+      "body": [
+        "Geräusche als Ereignisse",
+        "Verdacht statt binärer Sicht",
+        "Sichtkegel und letzten Ort visualisieren",
+        "Intelligenz als eigenen Faktor lösen",
+        "Designer-Presets und Kurven",
+        "Optionale Anpassung an Spielerleistung",
+        "Ausbauoptionen – noch nicht umgesetzt"
+      ],
+      "refs": [
+        "E1"
+      ],
+      "notes": "Bei den Sinnen sehe ich drei konkrete Richtungen. Erstens Geräusche als Ereignisse, etwa Schritte oder einen Kampf, mit Position und Stärke. Zweitens einen Verdachtswert, der bei kurzen oder schwachen Sichtkontakten erst steigt und bei Verlust wieder sinkt. Drittens Debug-Ansichten für Sichtkegel, Nähebereich und letzten bekannten Ort, damit Designer ihre Änderungen direkt überprüfen können. Bei der Difficulty wäre der erste Schritt, Intelligenz von Gesundheit und anderen Stat-Leveln zu entkoppeln. Danach könnten benannte Presets und Kurven die bisher linearen Koeffizienten ergänzen, sodass das Design Department gezieltere Progressionsverläufe erstellt. Eine automatische Anpassung an Spielerleistung wäre eine weitere Möglichkeit, aber nur mit einem klaren Designziel, begrenzten Änderungen und Playtests; sie ist im aktuellen System nicht vorhanden. Ich würde zunächst die Designerübersicht und Entkopplung priorisieren und erst danach zusätzliche Adaptivität prüfen. Diese Optionen sind Ausblick, keine bereits gelieferten Features."
+    },
+    {
+      "title": "Quellen · Design und Wahrnehmung",
+      "kind": "sources",
+      "seconds": 0,
+      "body": [],
+      "refs": [
+        "Q1",
+        "Q2",
+        "Q3",
+        "Q4"
+      ],
+      "notes": "Quellenanhang ohne geplante Sprechzeit. Q4 ist Hintergrund für Kompetenz/Autonomie und keine Bestätigung unserer Persona oder Difficultywerte. Vollständige Nachweise und Grenzen stehen im Begleitdossier."
+    },
+    {
+      "title": "Quellen · Implementierung und Vergleich",
+      "kind": "sources",
+      "seconds": 0,
+      "body": [],
+      "refs": [
+        "E1",
+        "E2",
+        "E5"
+      ],
+      "notes": "Quellenanhang ohne geplante Sprechzeit. E5 begrenzt den Alt-Neu-Vergleich auf den ursprünglichen Punch-Gegner, seinen Controller und ausgewählte Tasks. Kein vergleichender Performance- oder Spielerlebnisversuch."
+    }
+  ],
+  "sources": [
+    {
+      "id": "Q1",
+      "short": "Hunicke, LeBlanc & Zubek (2004)",
+      "title": "MDA: A Formal Approach to Game Design and Game Research",
+      "url": "https://www.cs.northwestern.edu/~hunicke/MDA.pdf",
+      "detail": "AAAI Workshop on Challenges in Game AI. Originalbeitrag, 5 PDF-Seiten; insbesondere PDF-S. 2 (MDA) und 3 (Dynamiken). Metadaten: https://aaai.org/papers/ws04-04-001-mda-a-formal-approach-to-game-design-and-game-research/",
+      "finding": "MDA unterscheidet Spielregeln, daraus entstehendes Laufzeitverhalten und angestrebte emotionale Spielerreaktionen.",
+      "transfer": "Wir analysieren die Kette: begrenzte Taser-Schüsse → Abstand und Timing abwägen → angestrebte taktische Spannung. Die Wirkung ist eine Projekthypothese.",
+      "limit": "Ein Analysemodell; kein experimenteller Nachweis für die Qualität dieses Enemys."
+    },
+    {
+      "id": "Q2",
+      "short": "Butcher & Griesemer (2002)",
+      "title": "Creating the Illusion of Intelligence: Where AI and Level Design Overlap in Halo’s AI",
+      "url": "https://halo.bungie.org/misc/gdc.2002.haloai/talk.html?page=25",
+      "detail": "GDC 2002; archivierte Originalvortragsnotizen, Zusammenfassung auf Seite 25. Sessionnachweis: https://gdcvault.com/play/1022590/Creating-the-Illusion-of-Intelligence",
+      "finding": "Die Vortragsnotizen betonen verständliches, interaktives Gegnerverhalten und erkennbare Denkprozesse.",
+      "transfer": "Verlust des Sichtkontakts soll Suche auslösen; nachvollziehbare Grenzen werden im Projekt durch Zustände und Ressourcen umgesetzt.",
+      "limit": "Praxisbericht zu Halo, keine kontrollierte Studie und keine Übertragung der Halo-Implementierung. Die Webseite hat eine irreführende Audio-Kopfzeile; zitiert sind die AI-Notizen."
+    },
+    {
+      "id": "Q3",
+      "short": "Martel (2017)",
+      "title": "Can You See Me Now? Building Robust AI Sensory Systems",
+      "url": "https://www.gdcvault.com/play/1026497/Can-You-See-Me-Now",
+      "detail": "Eric Martel, Ubisoft, GDC 2017 AI Summit. Verwendet wurde die öffentlich lesbare Sessionbeschreibung, nicht eine vollständige Videoanalyse.",
+      "finding": "Die Sessionbeschreibung begründet glaubwürdige Detektion mit robusten, für Designer konfigurierbaren Sensorsystemen.",
+      "transfer": "Sichtkegel, Distanz und Sichtprüfung werden getrennt von der zeitbasierten Näheerkennung eingestellt.",
+      "limit": "Begründet das Designprinzip; liefert keine Bestätigung für unsere 65 Grad oder 2,5 Sekunden und belegt kein bei uns implementiertes Hören."
+    },
+    {
+      "id": "Q4",
+      "short": "Ryan, Rigby & Przybylski (2006)",
+      "title": "The Motivational Pull of Video Games: A Self-Determination Theory Approach",
+      "url": "https://selfdeterminationtheory.org/SDT/documents/2006_RyanRigbyPrzybylski_MandE.pdf",
+      "detail": "Motivation and Emotion, 30(4), 347–363. DOI: 10.1007/s11031-006-9051-8. Vier Studien; Abstract PDF-S. 1, Diskussion/Grenzen PDF-S. 14–16.",
+      "finding": "Erlebte Kompetenz und Autonomie stehen in den untersuchten Spielen mit Spielvergnügen in Zusammenhang.",
+      "transfer": "Für unser Projekt folgt daraus die prüfbare Annahme, dass erkennbare Handlungsmöglichkeiten und bewältigbare Gegenwehr relevant sind.",
+      "limit": "Kein Beleg für einen optimalen Schwierigkeitswert und kein Nachweis für unsere Zielgruppe. Genre- und Messgrenzen werden von den Autoren diskutiert."
+    },
+    {
+      "id": "Q5",
+      "short": "Epic Games: Animation Montage (UE 5.5)",
+      "title": "Animation Montage",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-montage-in-unreal-engine?application_version=5.5",
+      "detail": "Offizielle technische Dokumentation; Abschnitte zu Blueprint-Steuerung, Slots und Slot Groups. Ohne ausgewiesenes Veröffentlichungsdatum; Versionsauswahl 5.5.",
+      "finding": "Montages lassen sich per Blueprint steuern und über Slots in die Animation einbinden.",
+      "transfer": "ABP_Enemy verwendet den Referenz-Slotaufbau; TryAttack wartet auf die Dauer der ausgewählten Punch-Montage.",
+      "limit": "Technische Referenz; belegt nicht automatisch korrektes Rigging, gutes Timing oder Multiplayer-Kompatibilität unseres Projekts."
+    },
+    {
+      "id": "Q6",
+      "short": "Epic Games: Navigation System (UE 5.5)",
+      "title": "Navigation System",
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/navigation-system-in-unreal-engine?application_version=5.5",
+      "detail": "Offizielle technische Übersicht; Navigation Mesh und Generation Modes. Ohne ausgewiesenes Veröffentlichungsdatum; Versionsauswahl 5.5.",
+      "finding": "Unreal nutzt ein aus Levelkollision erzeugtes Navigation Mesh zur Wegfindung und bietet verschiedene Erzeugungsmodi.",
+      "transfer": "Patrouille und Spawner benötigen erreichbare NavMesh-Punkte; prozedurale Räume werden erst nach MapComplete verarbeitet.",
+      "limit": "MapComplete ersetzt keinen erfolgreichen Navigationstest; die Quelle belegt keine vollständige Erreichbarkeit aller generierten Räume."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "title": "Blueprint-Implementierung und interner Funktionsnachweis",
+      "path": "../EnemyInternals.md; ../../Authoring/generate_blueprints.py; ../../Authoring/update_intelligence.py; ../GraphInventory.json",
+      "description": "Dokumentation und Authoring-Quelle inklusive installierter Animationskorrektur. 23 Enemy-Funktionen und 8 unterstützende Funktionen. Parameter stammen aus dieser Implementierung, nicht aus externer Literatur."
+    },
+    {
+      "id": "E2",
+      "title": "Blueprint-Gameplayprüfung",
+      "path": "../../Verification.txt",
+      "description": "Stand 12.11.2026: 55 PASS-Zeilen; RESULT failures=0. Enthält auch Kompilier-/Elternklassenprüfungen. Keine 55 unabhängigen Spielerexperimente."
+    },
+    {
+      "id": "E3",
+      "title": "Animierte Posen und Referenzsetup",
+      "path": "../../AnimationPoseVerification.txt",
+      "description": "Stand 12.11.2026: 27 PASS-Zeilen; RESULT failures=0. Vergleicht Referenzsetup und ausgewertete Posen mit BP_Enemy_punch; kein vollständiger visueller Playtest."
+    },
+    {
+      "id": "E4",
+      "title": "Arena-Smoke-Test",
+      "path": "../../Authoring/intelligence_arena.log",
+      "description": "Protokoll vom 12.11.2026: BLUEPRINT_ONLY_SMOKE enemies=3 controllers=3 moving=1. Ein bewegter Gegner am Messzeitpunkt, keine Aussage über dauerhaftes Verhalten aller Gegner."
+    },
+    {
+      "id": "E5",
+      "title": "Alt-Neu-Vergleich: Punch-Gegner und Blueprint-Gegner",
+      "path": "Alt_Neu_Vergleich.md",
+      "description": "Read-only-Graphinspektion am 13.11.2026: BP_Enemy_punch, zugewiesener AIC_Enemy_Base, BTT_DefaultAttack, BTT_MoveAlongRoute und BTT_FindRandomPatrolPoint. Belegt Struktur und sichtbare Aufrufe, keine Performance- oder Spielerlebnisüberlegenheit."
+    }
+  ]
+}

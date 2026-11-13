@@ -1,0 +1,5 @@
+PASS
+Matched BP_Enemy_punch AnimGraph, mesh transform, capsule and animation tick policy.
+Kept generic Blueprint owner updates and block placeholder.
+Melee recovery now waits for selected montage length / play rate.
+Anim errors=0 warnings=0; enemy errors=0 warnings=0

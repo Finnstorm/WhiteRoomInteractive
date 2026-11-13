@@ -1,0 +1,11 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Progress Enemy",
+  "Description": "Standalone enemy AI and procedural dungeon spawning.",
+  "Category": "AI",
+  "CanContainContent": false,
+  "Plugins": [{ "Name": "EnhancedInput", "Enabled": true }],
+  "Modules": [{ "Name": "ProgressEnemy", "Type": "Runtime", "LoadingPhase": "Default" }]
+}

@@ -1,0 +1,57 @@
+PASS AC_EnemyHealth_BP compiles after reopening
+PASS AC_EnemyHealth_BP has an engine parent
+PASS AC_EnemyCombat_BP compiles after reopening
+PASS AC_EnemyCombat_BP has an engine parent
+PASS ABP_Enemy compiles after reopening
+PASS ABP_Enemy has an engine parent
+PASS BP_PlayerBridge compiles after reopening
+PASS BP_PlayerBridge has an engine parent
+PASS BP_Enemy compiles after reopening
+PASS BP_Enemy has an engine parent
+PASS BP_EnemySpawner compiles after reopening
+PASS BP_EnemySpawner has an engine parent
+PASS Pure Blueprint health and combat components initialize
+PASS Health starts at 100
+DIAGNOSTIC Enabled=1 Light=1 State=1 Clear=1 Distance=120.0 Range=160.0
+PASS Light melee starts
+PASS Light hit resolves after windup
+PASS Selected punch montage is cached for playback timing
+PASS Attack recovery covers the complete selected punch montage
+PASS Heavy melee starts
+PASS Heavy uses slower timing than light
+PASS Disabled light attack cannot start
+PASS Disabling attack cancels pending damage
+PASS Block starts with charges
+PASS Three block hits absorb 75 percent
+PASS Shield exhaustion starts recharge
+PASS Shield recharges
+PASS Health and block scale independently
+PASS Live scaling preserves health percentage
+PASS Intelligence averages all four levels and scales decision delay
+PASS Extreme intelligence respects decision and navigation limits
+PASS Smart enemy avoids heavy attacks against moving targets
+PASS Smart enemy favors heavy attacks on close stationary targets
+PASS Smart wounded enemy increases defensive priority
+PASS Negative levels restore base intelligence safely
+PASS First taser attack starts
+PASS First taser shot does not start magazine cooldown
+PASS Second taser attack starts
+PASS Two shots exhaust taser magazine
+PASS Taser refills both shots
+PASS Proximity does not alert immediately
+PASS Leaving proximity resets notice timer
+PASS Continuous close presence triggers chase
+PASS Losing awareness starts search
+PASS Search timeout returns to patrol
+PASS Vision cone detects player
+PASS Movement difficulty scales speed
+PASS Player damage alerts enemy
+PASS Low health enables finisher
+PASS Finisher locks enemy and player movement
+PASS Removing enemy releases finisher movement lock
+PASS Newly alerted enemy waits for its decision delay
+PASS High intelligence attacks sooner than base intelligence
+PASS Base intelligence attacks after the longer delay
+PASS Newly alerted enemy waits for its decision delay
+PASS High intelligence attacks sooner than base intelligence
+RESULT failures=0

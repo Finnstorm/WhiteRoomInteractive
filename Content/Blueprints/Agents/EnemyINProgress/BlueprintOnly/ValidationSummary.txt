@@ -1,0 +1,13 @@
+Blueprint-only enemy validation
+
+All seven generated Blueprints compiled with zero errors and zero warnings.
+55 compile/parent/gameplay checks passed, including intelligence scaling, actual alert-to-attack delays, situational combat choices and complete montage playback timing. See Verification.txt.
+27 evaluated animation/setup checks passed against BP_Enemy_punch. Idle, walk, run, falling, light punch and heavy punch poses matched with 0.0000 cm maximum bone-position difference. See AnimationPoseVerification.txt.
+Mesh transform, capsule dimensions, animation tick policy, locomotion/falling/landing graph and montage slot now match the reference. The block placeholder is retained.
+The corrected Blueprint-only arena spawned 3 enemies with 3 AI controllers; 1 was moving at the sample time.
+The final arena log contained no Accessed None or infinite-loop warnings.
+Direct package-dependency audit passed for all generated Blueprints and L_EnemyTest_BP: no /Script/ProgressEnemy references.
+
+The existing project's old missing-sword enemy Blueprint errors remain separate.
+This is not a whole-project cook, packaging, or multiplayer validation.
+

@@ -1,0 +1,8 @@
+Plugins/**/Binaries/
+Plugins/**/Intermediate/
+Tools/PluginBuild/
+Tools/DistributionBuild/
+Tools/AutomationReport/
+Tools/*.log
+Tools/asset.txt
+ProjectInspection.txt

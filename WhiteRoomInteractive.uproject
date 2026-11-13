@@ -3,7 +3,9 @@
 	"EngineAssociation": "5.5",
 	"Category": "",
 	"Description": "",
+	"AdditionalPluginDirectories": ["Content/Blueprints/Agents/EnemyINProgress/Plugins"],
 	"Plugins": [
+		{ "Name": "ProgressEnemy", "Enabled": true },
 		{
 			"Name": "ModelingToolsEditorMode",
 			"Enabled": true,

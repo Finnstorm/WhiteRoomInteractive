@@ -1,0 +1,50 @@
+PASS Test player is possessed and damageable
+PASS Shared health and combat components initialize
+PASS Health initializes without old-enemy casts
+PASS Player damage triggers chase
+PASS Light melee starts in range
+PASS Light melee uses shared point damage once
+PASS Heavy melee uses same attack path
+PASS Repeated attack clears shared hit list and deals heavy damage
+PASS Disabled light attack cannot start
+PASS Disabling an attack cancels pending damage
+PASS Block can start with charges
+PASS Three block hits reduce damage by exactly 75 percent
+PASS Exhausted shield cannot block
+PASS Shield recharges after configured delay
+PASS Independent health and block difficulty scaling
+PASS Live difficulty changes preserve health percentage
+PASS Intelligence averages all four levels and scales decision delay
+PASS Extreme intelligence respects decision and navigation limits
+PASS Smart enemy avoids heavy attacks against moving targets
+PASS Smart enemy favors heavy attacks on close stationary targets
+PASS Smart wounded enemy increases defensive priority
+PASS Negative levels restore base intelligence safely
+PASS Negative difficulty values clamp to zero
+PASS First taser attack starts
+PASS First taser shot has no magazine cooldown
+PASS Second taser attack starts
+PASS Two taser shots exhaust magazine
+PASS Taser refills both shots after cooldown
+PASS Close player is not noticed immediately
+PASS Leaving proximity resets notice time
+PASS Continuous proximity triggers awareness outside vision cone
+PASS Losing player transitions chase to search
+PASS Search timeout returns to patrol
+PASS Player in vision cone is detected immediately
+PASS Movement difficulty scales chase speed independently
+PASS Taser-only configuration can fight at close range
+PASS Scaled melee can start
+PASS Damage difficulty scales point damage independently
+PASS Attack starts before target reaches cover
+PASS New cover during windup prevents damage through walls
+PASS Low health enables finishers
+PASS Finisher locks combat and player movement
+PASS Interrupted finisher restores player movement
+PASS Spawner waits when map/navigation is not ready
+PASS Newly alerted enemy waits for its decision delay
+PASS High intelligence attacks sooner than base intelligence
+PASS Base intelligence attacks after the longer delay
+PASS Newly alerted enemy waits for its decision delay
+PASS High intelligence attacks sooner than base intelligence
+RESULT failures=0

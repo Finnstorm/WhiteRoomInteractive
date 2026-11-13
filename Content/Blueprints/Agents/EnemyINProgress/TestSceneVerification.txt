@@ -1,0 +1,2 @@
+Standalone=1 Enemies=3 Controllers=3 Moving=2 Ready=1 NavProjection=1 Player=X=-1700.000 Y=0.000 Z=98.150
+RESULT PASS

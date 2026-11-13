@@ -1,0 +1,13 @@
+Mesh: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR.Ch11_nonPBR
+Skeleton: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Cross_Punch_Montage: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Hook_Punch_Montage: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Punching_Montage: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+AS_BlockPlaceholder: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Progress_EnemyHitReactionSide_Montage: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Progress_EnemyFinisherStruggleSuperrMontageGayMan: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Progress_EnemyHitReactionLower: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Progress_EnemyHitReactionSide: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Progress_EnemyHitReactionSide2: /Game/Blueprints/Agents/Enemy-Agent/Models/Model_Nurse/Ch11_nonPBR_Skeleton.Ch11_nonPBR_Skeleton
+Player finisher skeleton: PASS
+RESULT PASS

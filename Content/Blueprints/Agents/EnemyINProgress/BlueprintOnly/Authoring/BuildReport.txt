@@ -1,0 +1,8 @@
+PASS
+AC_EnemyHealth_BP errors=0 warnings=0
+AC_EnemyCombat_BP errors=0 warnings=0
+ABP_Enemy errors=0 warnings=0
+BP_PlayerBridge errors=0 warnings=0
+BP_Enemy errors=0 warnings=0
+BP_EnemySpawner errors=0 warnings=0
+BP_TestObserver errors=0 warnings=0

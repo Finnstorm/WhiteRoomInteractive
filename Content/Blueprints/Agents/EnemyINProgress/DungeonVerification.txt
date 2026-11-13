@@ -1,0 +1,2 @@
+MapComplete=1 Spawners=1 Enemies=20 Controllers=20 Moving=8 NavigationBuilding=0
+RESULT PASS

@@ -1,0 +1,28 @@
+PASS Mesh transform matches BP_Enemy_punch
+PASS Capsule height matches BP_Enemy_punch
+PASS Same nurse skeletal mesh
+PASS Animation Blueprint keeps engine AnimInstance parent
+PASS Idle evaluates matching skeleton bones
+PASS Idle matches reference pose (max position difference 0.0000 cm)
+PASS Idle updates the locomotion velocity binding
+PASS Walk evaluates matching skeleton bones
+PASS Walk matches reference pose (max position difference 0.0000 cm)
+PASS Walk is animated rather than a reference/idle pose
+PASS Walk updates the locomotion velocity binding
+PASS Run evaluates matching skeleton bones
+PASS Run matches reference pose (max position difference 0.0000 cm)
+PASS Run is animated rather than a reference/idle pose
+PASS Run updates the locomotion velocity binding
+PASS Falling evaluates matching skeleton bones
+PASS Falling matches reference pose (max position difference 0.0000 cm)
+PASS Falling is animated rather than a reference/idle pose
+PASS Falling updates the locomotion velocity binding
+PASS Light punch evaluates matching skeleton bones
+PASS Light punch matches reference pose (max position difference 0.0000 cm)
+PASS Light punch is animated rather than a reference/idle pose
+PASS Light punch updates the locomotion velocity binding
+PASS Heavy punch evaluates matching skeleton bones
+PASS Heavy punch matches reference pose (max position difference 0.0000 cm)
+PASS Heavy punch is animated rather than a reference/idle pose
+PASS Heavy punch updates the locomotion velocity binding
+RESULT failures=0

@@ -1,0 +1,4 @@
+Authoring/*.log
+Authoring/__pycache__/
+Authoring/AssetBackups/
+Authoring/AnimationInspection.txt
